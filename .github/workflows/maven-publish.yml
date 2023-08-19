@@ -25,8 +25,17 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Build with Maven
-      run: mvn -B clean compile package install --file ./leona-core-parent/pom.xml
+    - name: Maven Clean & Compile
+      run: mvn clean compile --file ./leona-core-parent/pom.xml
+
+    - name: Maven Build Cores
+      run: |
+        mvn -B compile package install --file ./leona-core-commons/pom.xml
+        mvn -B compile package install --file ./leona-core-utils/pom.xml
+        mvn -B compile package install --file ./leona-testing/pom.xml
+
+    - name: Maven build parent
+      run: mvn -B compile package install --file ./leona-core-parent/pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
