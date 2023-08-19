@@ -39,7 +39,7 @@ jobs:
     - name: Maven Build Parent POM
       env:
         GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      run: mvn -B clean compile package install --file ./leona-core-parent/pom.xml
+      run: mvn -B clean compile package install gpg:sign --file ./leona-core-parent/pom.xml
 
     - name: Publish to Central Repository
       env:
