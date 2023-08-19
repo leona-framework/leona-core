@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons;
+package org.lyora.leona.core.commons;
 
 public record Priority(int value) {
     public static final int FIRST_VALUE = 10000;

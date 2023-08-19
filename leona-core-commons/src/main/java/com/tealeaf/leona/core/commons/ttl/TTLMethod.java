@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons.ttl;
+package org.lyora.leona.core.commons.ttl;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

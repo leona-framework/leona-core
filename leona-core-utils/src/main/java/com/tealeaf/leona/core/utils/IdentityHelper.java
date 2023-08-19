@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.utils;
+package org.lyora.leona.core.utils;
 
 import jakarta.annotation.Nullable;
 

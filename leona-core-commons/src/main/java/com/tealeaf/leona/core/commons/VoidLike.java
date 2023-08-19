@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons;
+package org.lyora.leona.core.commons;
 
 public class VoidLike {
     public static final VoidLike INSTANCE = new VoidLike();

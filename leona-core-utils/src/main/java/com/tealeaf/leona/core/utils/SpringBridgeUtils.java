@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.utils;
+package org.lyora.leona.core.utils;
 
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;

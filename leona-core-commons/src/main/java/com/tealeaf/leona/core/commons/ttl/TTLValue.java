@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons.ttl;
+package org.lyora.leona.core.commons.ttl;
 
 import java.time.Instant;
 

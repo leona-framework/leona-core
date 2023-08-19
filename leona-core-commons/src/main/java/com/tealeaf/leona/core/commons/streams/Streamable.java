@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons.streams;
+package org.lyora.leona.core.commons.streams;
 
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;

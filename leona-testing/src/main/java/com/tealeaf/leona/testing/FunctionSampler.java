@@ -1,4 +1,4 @@
-package com.tealeaf.leona.testing;
+package org.lyora.leona.testing;
 
 import java.time.Duration;
 import java.util.function.Supplier;
