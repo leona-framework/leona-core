@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons;
+package com.tealeaf.leona.core.commons.ttl;
 
 import org.springframework.context.annotation.Import;
 

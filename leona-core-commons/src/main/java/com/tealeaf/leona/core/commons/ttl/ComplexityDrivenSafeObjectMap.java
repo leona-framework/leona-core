@@ -1,5 +1,6 @@
-package com.tealeaf.leona.core.commons;
+package com.tealeaf.leona.core.commons.ttl;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -66,17 +67,17 @@ class ComplexityDrivenSafeObjectMap<T> implements Map<Object, T> {
     }
 
     @Override
-    public Set<Object> keySet() {
+    public @NotNull Set<Object> keySet() {
         return classHashMap.values().stream().flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
     }
 
     @Override
-    public Collection<T> values() {
+    public @NotNull Collection<T> values() {
         return backingObjectMap.values();
     }
 
     @Override
-    public Set<Entry<Object, T>> entrySet() {
+    public @NotNull Set<Entry<Object, T>> entrySet() {
         return backingObjectMap.entrySet().stream().map(e -> new LazyEntry<>((Object)e.getKey(), e.getValue())).collect(Collectors.toSet());
     }
 

@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons;
+package com.tealeaf.leona.core.commons.ttl;
 
 import jakarta.annotation.Nullable;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -14,7 +14,7 @@ import java.util.Objects;
  * Complexity-Driven Safe Object Map (TTL Store)
  * Implements the basic functionality of {@link TTLStore<T>} using a {@link ComplexityDrivenSafeObjectMap<T>}.
  */
-public class CdsoTTLStore<T> implements TTLStore<T> {
+class CdsoTTLStore<T> implements TTLStore<T> {
     private final ComplexityDrivenSafeObjectMap<Map<Integer, TTLValue<T>>> objectMap = new ComplexityDrivenSafeObjectMap<>();
 
     @Override

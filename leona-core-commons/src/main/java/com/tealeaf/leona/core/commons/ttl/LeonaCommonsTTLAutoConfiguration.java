@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons;
+package com.tealeaf.leona.core.commons.ttl;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 @Import(TTLMethodAspect.class)
 @AutoConfiguration
 @EnableAspectJAutoProxy
-public class LeonaCommonsTTLAutoConfiguration {
+class LeonaCommonsTTLAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
