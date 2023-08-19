@@ -24,8 +24,8 @@ jobs:
         distribution: 'temurin'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-    - name: Build with Maven
+        
+    - name: Maven Build Parent POM
       run: mvn -B clean compile package install --file ./leona-core-parent/pom.xml
 
     - name: Publish to GitHub Packages Apache Maven

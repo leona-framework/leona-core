@@ -3,14 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tealeaf.leona</groupId>
     <artifactId>leona-core</artifactId>
     <version>0.0.2</version>
     <name>leona-core</name>
     <description>leona-core</description>
 
     <parent>
-        <groupId>com.tealeaf.leona</groupId>
+        <groupId>com.sylvona.leona</groupId>
         <artifactId>leona-core-parent</artifactId>
         <version>0.0.2</version>
         <relativePath>leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
@@ -18,15 +17,23 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.tealeaf.leona</groupId>
+            <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-commons</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>com.tealeaf.leona</groupId>
+            <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-utils</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

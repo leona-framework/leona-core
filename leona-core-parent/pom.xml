@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.tealeaf.leona</groupId>
+	<groupId>com.sylvona.leona</groupId>
 	<artifactId>leona-core-parent</artifactId>
 	<version>0.0.2</version>
 	<name>leona-core-parent</name>
@@ -32,6 +32,7 @@
 		<leona-core-utils.version>0.0.2</leona-core-utils.version>
 		<leona-testing.version>0.0.2</leona-testing.version>
 	</properties>
+
 
 	<dependencies>
 		<dependency>
@@ -72,31 +73,31 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.tealeaf.leona</groupId>
+				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-core</artifactId>
 				<version>${leona-core.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.tealeaf.leona</groupId>
+				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-core-commons</artifactId>
 				<version>${leona-core-commons.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.tealeaf.leona</groupId>
+				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-core-modules</artifactId>
 				<version>${leona-core-modules.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.tealeaf.leona</groupId>
+				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-core-utils</artifactId>
 				<version>${leona-core-utils.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.tealeaf.leona</groupId>
+				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-testing</artifactId>
 				<version>${leona-testing.version}</version>
 			</dependency>
@@ -109,31 +110,45 @@
 
 		</dependencies>
 	</dependencyManagement>
+
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.3.0</version>
+					<configuration>
+						<skipIfEmpty>true</skipIfEmpty>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.3.0</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
