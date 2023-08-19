@@ -42,3 +42,5 @@ jobs:
           -DaltReleaseDeploymentRepository=ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
           -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
           clean deploy
+          --file ./leona-core-parent/pom.xml
+
