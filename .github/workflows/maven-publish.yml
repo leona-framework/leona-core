@@ -26,6 +26,14 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+
+    - id: install-secret-key
+      name: Install gpg secret key
+      run: |
+        # Install gpg secret key
+        cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+        # Verify gpg secret key
+        gpg --list-secret-keys --keyid-format LONG
         
     - name: Maven Build Parent POM
       run: mvn -B clean compile package install --file ./leona-core-parent/pom.xml
@@ -38,7 +46,9 @@ jobs:
         mvn \
           --no-transfer-progress \
           --batch-mode \
-          -DaltSnapshotDeploymentRepository=snapshots::default::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
-          -DaltReleaseDeploymentRepository=releases::default::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
+          -DaltSnapshotDeploymentRepository=ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
+          -DaltReleaseDeploymentRepository=ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
           -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
           clean deploy
+          --file ./leona-core-parent/pom.xml
+
