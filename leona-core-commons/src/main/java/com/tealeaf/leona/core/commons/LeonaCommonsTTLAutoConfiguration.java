@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons.aop;
+package com.tealeaf.leona.core.commons;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

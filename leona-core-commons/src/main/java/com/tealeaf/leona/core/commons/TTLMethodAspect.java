@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons.aop;
+package com.tealeaf.leona.core.commons;
 
 import lombok.AllArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,7 +16,7 @@ import java.time.Duration;
 class TTLMethodAspect {
     private final TTLStore<Object> ttlStore;
 
-    @Pointcut("execution(@com.tealeaf.leona.core.aop.TTLMethod * *(..))")
+    @Pointcut("execution(@com.tealeaf.leona.core.commons.TTLMethod * *(..))")
     public void findMarkedTTLMethods() {}
 
     @Around("findMarkedTTLMethods()")

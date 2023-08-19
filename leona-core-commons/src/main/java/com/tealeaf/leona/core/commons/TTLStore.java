@@ -1,4 +1,4 @@
-package com.tealeaf.leona.core.commons.aop;
+package com.tealeaf.leona.core.commons;
 
 import jakarta.annotation.Nullable;
 import org.aspectj.lang.reflect.MethodSignature;

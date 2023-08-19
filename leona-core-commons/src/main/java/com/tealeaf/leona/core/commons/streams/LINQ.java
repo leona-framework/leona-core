@@ -1,4 +1,4 @@
-package com.tealeaf.leona.commons.streams;
+package com.tealeaf.leona.core.commons.streams;
 
 import com.google.common.collect.Streams;
 import jakarta.annotation.Nullable;
