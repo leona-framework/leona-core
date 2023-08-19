@@ -38,7 +38,7 @@ jobs:
         mvn \
           --no-transfer-progress \
           --batch-mode \
-          -DaltSnapshotDeploymentRepository=snapshots::default::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
-          -DaltReleaseDeploymentRepository=releases::default::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
+          -DaltSnapshotDeploymentRepository=ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
+          -DaltReleaseDeploymentRepository=ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
           -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
           clean deploy
