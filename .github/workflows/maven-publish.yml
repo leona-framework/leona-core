@@ -39,7 +39,7 @@ jobs:
     - name: Maven Build Parent POM
       env:
         GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      run: mvn -B clean compile javadoc:javadoc source:jar package install --file ./leona-core-parent/pom.xml
+      run: mvn -B clean compile package install --file ./leona-core-parent/pom.xml
 
     - name: Publish to Central Repository
       env:
@@ -53,5 +53,5 @@ jobs:
           -DaltSnapshotDeploymentRepository=ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
           -DaltReleaseDeploymentRepository=ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
           -Darguments=-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
-          deploy --file ./leona-core-parent/pom.xml
+          javadoc:javadoc source:jar gpg:sign deploy --file ./leona-core-parent/pom.xml
 
