@@ -9,7 +9,7 @@
     <description>leona-core</description>
 
     <parent>
-        <groupId>org.lyora.leona</groupId>
+        <groupId>com.sylvona.leona</groupId>
         <artifactId>leona-core-parent</artifactId>
         <version>0.0.2</version>
         <relativePath>leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
@@ -17,15 +17,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.lyora.leona</groupId>
+            <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-commons</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>org.lyora.leona</groupId>
+            <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-utils</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -33,11 +31,7 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                    <skipIfEmpty>true</skipIfEmpty>
-                </configuration>
+                <artifactId>maven-source-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
