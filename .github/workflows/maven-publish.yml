@@ -25,7 +25,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - name: Publish to GitHub Packages
-      run: mvn --batch-mode deploy --file ./leona-core-parent/pom.xml
+      run: mvn -Dgithub-release=true --batch-mode deploy --file ./leona-core-parent/pom.xml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
@@ -59,8 +59,9 @@ jobs:
         mvn \
           --no-transfer-progress \
           --batch-mode \
+          -Dmaven-central-release=true \
           -DaltSnapshotDeploymentRepository=ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
           -DaltReleaseDeploymentRepository=ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
           -Darguments=-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
-          verify javadoc:jar source:jar gpg:sign install deploy --file ./leona-core-parent/pom.xml
+          verify install deploy --file ./leona-core-parent/pom.xml
 
