@@ -27,8 +27,8 @@ jobs:
     - name: Publish to GitHub Packages
       run: |
         mvn \
-          -DaltReleaseDeploymentRepository=release::https://maven.pkg.github.com/sylvona/leona-framework/leona-core \
-          -X -Dgithub-release=true --batch-mode deploy --file ./leona-core-parent/pom.xml
+          -DaltReleaseDeploymentRepository=github::https://maven.pkg.github.com/sylvona/leona-framework/leona-core \
+          -Dgithub-release=true --batch-mode deploy --file ./leona-core-parent/pom.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
     
