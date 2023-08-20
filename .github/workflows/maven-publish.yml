@@ -25,7 +25,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - name: Publish to GitHub Packages
-      run: mvn -Dgithub-release=true --batch-mode deploy --file ./leona-core-parent/pom.xml
+      run: |
+        mvn \
+          -DaltReleaseDeploymentRepository=release::https://maven.pkg.github.com/sylvona/leona-framework/leona-core \
+          -Dgithub-release=true --batch-mode deploy --file ./leona-core-parent/pom.xml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
