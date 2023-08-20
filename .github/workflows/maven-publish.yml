@@ -27,7 +27,7 @@ jobs:
     - name: Publish to GitHub Packages
       run: |
         mvn \
-          -DaltReleaseDeploymentRepository=github::https://maven.pkg.github.com/phanatic \
+          -DaltReleaseDeploymentRepository=github::https://maven.pkg.github.com/kaiqkt/commons-spring \
           -Dgithub-release=true --batch-mode deploy --file ./leona-core-parent/pom.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
