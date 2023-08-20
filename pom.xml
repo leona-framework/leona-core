@@ -6,7 +6,25 @@
     <artifactId>leona-core</artifactId>
     <version>0.0.2</version>
     <name>leona-core</name>
-    <description>leona-core</description>
+    <description>Provides a simple maven dependency that contains all leona-core libraries.</description>
+    <url>https://github.com/leona-framework/leona-core</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Leona Framework Team</name>
+            <email>sylvona-admin@slyonva.com</email>
+            <organization>Sylvona</organization>
+            <organizationUrl>https://www.sylvona.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/leona-framework/leona-core/</url>
+    </scm>
 
     <parent>
         <groupId>com.sylvona.leona</groupId>
@@ -26,14 +44,5 @@
             <artifactId>leona-core-utils</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
