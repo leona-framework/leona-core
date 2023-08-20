@@ -18,7 +18,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK 17
+
+    - name: Set up Java for publishing to GitHub Packages
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Publish to GitHub Packages
+      run: mvn --batch-mode deploy --file ./leona-core-parent/pom.xml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Java for publishing to Maven Central
       uses: actions/setup-java@v3
       with:
           java-version: '17'
@@ -29,19 +40,17 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE
 
     - id: install-secret-key
-      name: Install gpg secret key
+      name: Install GPG Secret Key
       run: |
         # Install gpg secret key
         cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-        # Verify gpg secret key
-        gpg --list-secret-keys --keyid-format LONG
         
-    - name: Maven Build Parent POM
+    - name: Maven Build Parent and Children
       env:
         GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      run: mvn -B clean compile package install gpg:sign --file ./leona-core-parent/pom.xml
+      run: mvn -B clean compile package --file ./leona-core-parent/pom.xml
 
-    - name: Publish to Central Repository
+    - name: Publish All to Maven Central
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
@@ -53,5 +62,5 @@ jobs:
           -DaltSnapshotDeploymentRepository=ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots/ \
           -DaltReleaseDeploymentRepository=ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
           -Darguments=-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
-          javadoc:jar source:jar gpg:sign deploy --file ./leona-core-parent/pom.xml
+          verify javadoc:jar source:jar gpg:sign install deploy --file ./leona-core-parent/pom.xml
 
