@@ -6,7 +6,25 @@
     <artifactId>leona-testing</artifactId>
     <version>0.0.2</version>
     <name>leona-testing</name>
-    <description>leona-testing</description>
+    <description>Testing components and utils used by multiple leona-framework libraries.</description>
+    <url>https://github.com/leona-framework/leona-core</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Leona Framework Team</name>
+            <email>sylvona-admin@slyonva.com</email>
+            <organization>Sylvona</organization>
+            <organizationUrl>https://www.sylvona.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/leona-framework/leona-core/</url>
+    </scm>
 
 
     <properties>
