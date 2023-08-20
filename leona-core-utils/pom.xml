@@ -38,7 +38,7 @@
 		<groupId>com.sylvona.leona</groupId>
 		<artifactId>leona-core-parent</artifactId>
 		<version>0.0.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath>../leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 
 </project>
