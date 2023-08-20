@@ -5,7 +5,25 @@
     <artifactId>leona-core-commons</artifactId>
     <version>0.0.2</version>
     <name>leona-core-commons</name>
-    <description>leona-core-commons</description>
+    <description>Common set of collections, components, and other useful features that are shared among multiple leona-framework libraries.</description>
+    <url>https://github.com/leona-framework/leona-core</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Leona Framework Team</name>
+            <email>sylvona-admin@slyonva.com</email>
+            <organization>Sylvona</organization>
+            <organizationUrl>https://www.sylvona.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/leona-framework/leona-core/</url>
+    </scm>
 
 
 
@@ -20,14 +38,5 @@
         <version>0.0.2</version>
         <relativePath>../leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
