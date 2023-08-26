@@ -133,6 +133,10 @@ public final class LINQ {
         return stream.collect(Collectors.toMap(keyFunction, valueFunction, (m1, m2) -> m1, mapSupplier));
     }
 
+    public static <C extends Collection<T>, T> C collect(Stream<T> stream, Supplier<C> collectionSupplier) {
+        return stream.collect(Collectors.toCollection(collectionSupplier));
+    }
+
     public static <T> LINQStream<T> stream(T[] array) {
         return new LINQStream<>(Arrays.stream(array));
     }

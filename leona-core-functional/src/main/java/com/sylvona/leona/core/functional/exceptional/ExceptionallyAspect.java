@@ -39,12 +39,12 @@ public class ExceptionallyAspect {
 
             if (hasTarget) {
                 if (Arrays.stream(targetExceptions).anyMatch(target -> target.isInstance(e))) {
-                    return Exceptional.error(e);
+                    return Exceptional.right(e);
                 }
             }
 
             if (e instanceof RuntimeException rte) {
-                return Exceptional.error(rte);
+                return Exceptional.right(rte);
             }
 
             throw e;

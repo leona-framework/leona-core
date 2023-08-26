@@ -316,4 +316,8 @@ public class LINQStream<T> implements Stream<T> {
     public <TKey, TValue> Map<TKey, TValue> toMap(Function<T, TKey> keyFunction, Function<T, TValue> valueFunction, Supplier<Map<TKey, TValue>> mapSupplier) {
         return LINQ.toMap(stream, keyFunction, valueFunction, mapSupplier);
     }
+
+    public <C extends Collection<T>> C collect(Supplier<C> collection) {
+        return LINQ.collect(stream, collection);
+    }
 }
