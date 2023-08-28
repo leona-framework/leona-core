@@ -1,11 +1,14 @@
 package com.sylvona.leona.core.commons.containers;
 
-import com.sylvona.leona.core.commons.containers.Tuple;
 import com.sylvona.leona.core.commons.streams.LINQ;
 import com.sylvona.leona.core.commons.streams.LINQStream;
 
 import java.util.Iterator;
 
+/**
+ * A utility class containing useful functions for operating upon {@link Tuple tuples}.
+ * @see Tuple
+ */
 public class TupleOperators {
     /**
      * Unpacks a tuple's elements into a {@link LINQStream}.
@@ -35,12 +38,12 @@ public class TupleOperators {
         private final boolean rightSided;
         private Object standby;
 
-        public TupleIterator(Tuple<?, ?> packedTuple, boolean rightSided) {
+        private TupleIterator(Tuple<?, ?> packedTuple, boolean rightSided) {
             standby = packedTuple;
             this.rightSided = rightSided;
         }
 
-        public TupleIterator(Tuple<?, ?> packedTuple) {
+        private TupleIterator(Tuple<?, ?> packedTuple) {
             this(packedTuple, false);
         }
 

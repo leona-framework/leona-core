@@ -1,96 +1,118 @@
 package com.sylvona.leona.core.commons.containers;
 
-import com.sylvona.leona.core.commons.streams.LINQ;
-import com.sylvona.leona.core.commons.streams.LINQStream;
-import com.sylvona.leona.core.commons.streams.SingletonIterator;
-import com.sylvona.leona.core.commons.streams.Streamable;
-import jakarta.validation.constraints.NotNull;
-
-import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * An interface representing an "either" type that holds either a successful result or an error.
+ * An interface representing a type that holds either a {@code left} value or {@code right} value.
  *
- * @param <Left> The type of the successful result.
- * @param <Right> The type of the error, which is a subtype of Throwable.
+ * @param <Left> The expected {@code left} type.
+ * @param <Right> The expected {@code right} type.
  */
-public interface Either<Left, Right> extends Streamable<Tuple<Left, Right>> {
+public interface Either<Left, Right> {
+    /**
+     * Constructs a default implementation of {@code Either} with the given left value.
+     * @param left the {@code left} value to construct the {@code Either} with.
+     * @return a default implementation of {@code Either} with the left value.
+     * @param <Left> the {@code left} type of the Either.
+     * @param <Right> the {@code right} type of the Either.
+     */
     static <Left, Right> Either<Left, Right> ofLeft(Left left) {
         return new EitherImpl<>(left, null);
     }
 
+    /**
+     * Constructs a default implementation of {@code Either} with the given right value.
+     * @param right the {@code right} value to construct the {@code Either} with.
+     * @return a default implementation of {@code Either} with the right value.
+     * @param <Left> the {@code left} type of the Either.
+     * @param <Right> the {@code right} type of the Either.
+     */
     static <Left, Right> Either<Left, Right> ofRight(Right right) {
         return new EitherImpl<>(null, right);
     }
 
     /**
-     * Retrieves the successful result held by this "either" instance.
+     * Retrieves the {@code left} value held by this instance.
      *
-     * @return The successful result.
+     * @return The {@code left} value.
      */
     Left left();
 
     /**
-     * Retrieves the error held by this "either" instance.
+     * Retrieves the {@code right} value held by this instance.
      *
-     * @return The error.
+     * @return The {@code right} value.
      */
     Right right();
 
     /**
-     * Produces a value based on the content of the "either" instance using the provided functions.
-     * If the instance holds an error, the rightProducer function is applied to produce a value.
-     * If the instance holds a successful result, the leftProducer function is applied.
+     * Produces a value based on the content of the {@code Either} instance using the provided functions.
+     * If the instance has a {@code left}, the {@code leftProducer} function is applied to produce a value.
+     * If the instance has a {@code right}, the {@code rightProducer} function is applied to produce a value.
      *
-     * @param leftProducer The function to produce a value based on the successful result.
-     * @param rightProducer The function to produce a value based on the error.
+     * @param leftProducer The function to produce a value based on the presence of a {@code left} value.
+     * @param rightProducer The function to produce a value based on the presence of a {@code right} value.
      * @param <T> The type of the produced value.
-     * @return The produced value based on the content of the "either" instance.
+     * @return The produced value based on the content of the {@code Either} instance.
      */
     default <T> T produce(Function<Left, T> leftProducer, Function<Right, T> rightProducer) {
         return hasRight() ? rightProducer.apply(right()) : leftProducer.apply(left());
     }
 
     /**
-     * Checks if the "either" instance holds an error.
+     * Checks if the {@code Either} instance has a {@code right} value.
      *
-     * @return {@code true} if the instance holds an error, {@code false} if it holds a successful result.
+     * @return {@code true} if the instance has a {@code right} error, {@code false} if it doesn't.
      */
     default boolean hasRight() {
         return right() != null;
     }
 
     /**
-     * Checks if the "either" instance holds a successful result.
+     * Checks if the {@code Either} instance has a {@code left} value.
      *
-     * @return {@code true} if the instance holds a successful result, {@code false} if it holds an error.
+     * @return {@code true} if the instance has a {@code left} value, {@code false} if it doesn't.
      */
     default boolean hasLeft() {
         return right() == null;
     }
 
+    /**
+     * Executes a provided consumer on the contained {@code left} value if it is present.
+     *
+     * @param consumer The consumer to apply to the possible {@code left} value.
+     */
     default void ifLeft(Consumer<Left> consumer) {
-        if (hasLeft()) consumer.accept(left());
+        if (hasLeft()) {
+            consumer.accept(left());
+        }
     }
 
+    /**
+     * Executes a provided consumer on the contained {@code right} value if it is present.
+     *
+     * @param consumer The consumer to apply to the possible {@code right} value.
+     */
     default void ifRight(Consumer<Right> consumer) {
-        if (hasRight()) consumer.accept(right());
+        if (hasRight()) {
+            consumer.accept(right());
+        }
     }
 
-    default void ifLeftOrRight(Consumer<Left> successConsumer, Consumer<Right> errorConsumer) {
-        if (hasLeft()) successConsumer.accept(left());
-        else errorConsumer.accept(right());
-    }
-
-    @Override
-    default LINQStream<Tuple<Left, Right>> stream() {
-        return LINQ.stream(this);
-    }
-
-    @Override
-    default @NotNull Iterator<Tuple<Left, Right>> iterator() {
-        return hasLeft() ? SingletonIterator.of(Tuple.of(left(), right())) : SingletonIterator.empty();
+    /**
+     * Executes a specified consumer based on the presence of a {@code left} or {@code right} value.
+     * If a {@code left} value exists, the {@code leftConsumer} is executed.
+     * If a {@code right} value exists, the {@code rightConsumer} is executed.
+     *
+     * @param leftConsumer  The consumer to be executed if the {@code left} value exists.
+     * @param rightConsumer The consumer to be executed if the {@code right} value exists.
+     */
+    default void ifLeftOrRight(Consumer<Left> leftConsumer, Consumer<Right> rightConsumer) {
+        if (hasLeft()) {
+            leftConsumer.accept(left());
+        } else {
+            rightConsumer.accept(right());
+        }
     }
 }

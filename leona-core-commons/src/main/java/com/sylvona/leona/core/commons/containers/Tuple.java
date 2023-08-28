@@ -17,6 +17,16 @@ import java.util.function.Function;
  * @param <T2> The type of the second element.
  */
 public record Tuple<T1, T2>(@NotNull T1 item1, @NotNull T2 item2) implements Streamable<Object> {
+    /**
+     * Creates a new instance of {@code Tuple} with the specified items.
+     *
+     * @param item1 The first item.
+     * @param item2 The second item.
+     * @param <T1>  The type of the first item.
+     * @param <T2>  The type of the second item.
+     * @return A new {@code Tuple} containing the specified items.
+     * @throws NullPointerException If either {@code item1} or {@code item2} is {@code null}.
+     */
     public static <T1, T2> Tuple<T1, T2> of(@NotNull T1 item1, @NotNull T2 item2) {
         return new Tuple<>(item1, item2);
     }

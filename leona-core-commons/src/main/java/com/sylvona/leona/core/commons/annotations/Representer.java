@@ -1,6 +1,7 @@
 package com.sylvona.leona.core.commons.annotations;
 
 import com.sylvona.leona.core.commons.containers.Tuple;
+import com.sylvona.leona.core.commons.streams.LINQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.AnnotationConfigurationException;
 
@@ -14,6 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A utility class that works with the {@link Represents @Represents} annotation to create an object-based representation of a runtime annotation.
+ * @see Represents
+ */
 public final class Representer {
     private static final Map<Class<? extends Annotation>, Representer> ANNOTATION_REPRESENTATION_MAP = new HashMap<>();
     private static final Map<Class<?>, Map<Class<? extends Annotation>, Representer>> CLASS_TO_ANNOTATION_MAP = new HashMap<>();
@@ -68,6 +73,15 @@ public final class Representer {
         }
     }
 
+    /**
+     * Creates a representation of the provided annotation using its provided representation class.
+     *
+     * @param annotation The annotation to create a representation for.
+     * @param <T>        The type of the representation.
+     * @return A representation of the annotation.
+     * @throws NoRepresentationException if the passed annotation is not annotated with @Represents OR if its @Represents annotation does not define a representation class.
+     * @throws AnnotationConfigurationException if the passed annotation defines more than one representation class.
+     */
     @SuppressWarnings("unchecked")
     public static <T> T get(Annotation annotation) {
         Class<? extends Annotation> annotationClass = annotation.getClass();
@@ -75,20 +89,33 @@ public final class Representer {
         if (representation != null) return representation.createRepresentation(annotation);
 
         Represents representAnnotation = annotation.getClass().getAnnotation(Represents.class);
-        if (representAnnotation == null) throw new AnnotationConfigurationException("Cannot create a representation for annotation %s. Annotation is not marked with @Represents!".formatted(annotation));
+        if (representAnnotation == null || representAnnotation.value().length == 0) throw new NoRepresentationException("Cannot create a representation for annotation %s. Annotation is not marked with @Represents!".formatted(annotation));
         Class<?>[] annotationToClassRepresentations = representAnnotation.value();
         if (annotationToClassRepresentations.length > 1) throw new AnnotationConfigurationException("@Represents declared for annotations cannot have more than one representation class.");
 
         return (T) getAndRegisterRepresentation(annotation, annotationClass, annotationToClassRepresentations[0]);
     }
 
+    /**
+     * Creates a representation of the provided annotation using the specified representation class.
+     * Classes passed in via the {@code representationClass parameter} do not need to have the {@link Represents}
+     * annotation present on them, Similarly, the {@code annotation parameter} does not need that annotation present either.
+     * However, if the annotation is present on either input, the mappings provided via that annotation will be used to enhance the final
+     * object. In the case that both inputs have the {@code Represents} annotation present on them, the annotation on the {@code representationClass} will
+     * take priority and will have its field mappings used.
+     *
+     * @param annotation         The annotation to create a representation for.
+     * @param representationClass The class to use as the representation.
+     * @param <T>                The type of the representation.
+     * @return A representation of the annotation.
+     */
     public static <T> T get(Annotation annotation, Class<T> representationClass) {
         return getAndRegisterRepresentation(annotation, annotation.getClass(), representationClass);
     }
 
     private static <T> T getAndRegisterRepresentation(Annotation annotation, Class<? extends Annotation> annotationClass, Class<T> representationClass) {
         Represents representationClassAnnotation = representationClass.getAnnotation(Represents.class);
-        if (representationClassAnnotation != null) {
+        if (representationClassAnnotation != null && LINQ.stream(representationClassAnnotation.value()).contains(annotationClass)) {
             Map<Class<? extends Annotation>, Representer> classExtractionMap = CLASS_TO_ANNOTATION_MAP.computeIfAbsent(representationClass, ignored -> new HashMap<>());
             return classExtractionMap.computeIfAbsent(annotationClass, ignored -> new Representer(annotationClass, representationClass, true)).createRepresentation(annotation);
         }
@@ -105,6 +132,12 @@ public final class Representer {
         return representer.createRepresentation(annotation);
     }
 
+    /**
+     * Creates a new instance of the representation class using the values of the provided annotation.
+     * @param annotation the annotation to create a representation of
+     * @return a representation of the provided annotation
+     * @param <T> the type of the representation.
+     */
     public <T> T createRepresentation(Annotation annotation) {
         T representation = constructRepresentation();
         for (Tuple<Method, Field> methodFieldTuple : mappedAnnotationFields) {

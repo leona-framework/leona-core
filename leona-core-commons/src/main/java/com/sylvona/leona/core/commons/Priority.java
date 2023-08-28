@@ -1,24 +1,79 @@
 package com.sylvona.leona.core.commons;
 
+/**
+ * A class representing a priority level, with pre-defined priority values and utility methods.
+ */
 public record Priority(int value) {
+
+    /**
+     * The highest priority value.
+     */
     public static final int FIRST_VALUE = 10000;
+    /**
+     * A very high priority value.
+     */
     public static final int VERY_HIGH_VALUE = 8000;
+    /**
+     * A high priority value.
+     */
     public static final int HIGH_VALUE = 6500;
+    /**
+     * A normal/default priority value.
+     */
     public static final int NORMAL_VALUE = 5000;
+    /**
+     * A low priority value.
+     */
     public static final int LOW_VALUE = 4500;
+    /**
+     * A very low priority value.
+     */
     public static final int VERY_LOW_VALUE = 2000;
+    /**
+     * The lowest priority value.
+     */
     public static final int LAST_VALUE = 0;
 
+    /**
+     * The highest priority.
+     */
     public static final Priority FIRST = new Priority(FIRST_VALUE);
+    /**
+     * A very high priority.
+     */
     public static final Priority VERY_HIGH = new Priority(VERY_HIGH_VALUE);
+    /**
+     * A high priority.
+     */
     public static final Priority HIGH = new Priority(HIGH_VALUE);
+    /**
+     * A normal/default priority.
+     */
     public static final Priority NORMAL = new Priority(NORMAL_VALUE);
+    /**
+     * A low priority.
+     */
     public static final Priority LOW = new Priority(LOW_VALUE);
+    /**
+     * A very low priority.
+     */
     public static final Priority VERY_LOW = new Priority(VERY_LOW_VALUE);
+    /**
+     * The lowest priority.
+     */
     public static final Priority LAST = new Priority(LAST_VALUE);
 
+    /**
+     * Creates a new {@link Priority} instance with the specified value.
+     *
+     * @param value The priority value.
+     * @return A new {@link Priority} instance.
+     * @throws IllegalArgumentException if the value is less than 0 or greater than 10,000.
+     */
     public static Priority of(int value) {
-        if (value < 0 || value > 10000) throw new IllegalArgumentException("Priority value cannot be less than zero or greater than 10,000.");
+        if (value < 0 || value > 10000) {
+            throw new IllegalArgumentException("Priority value cannot be less than zero or greater than 10,000.");
+        }
         return switch (value) {
             case FIRST_VALUE -> FIRST;
             case VERY_HIGH_VALUE -> VERY_HIGH;
