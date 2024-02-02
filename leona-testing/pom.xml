@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>leona-testing</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <name>leona-testing</name>
     <description>Testing components and utils used by multiple leona-framework libraries.</description>
     <url>https://github.com/leona-framework/leona-core</url>
@@ -17,7 +17,7 @@
     <developers>
         <developer>
             <name>Leona Framework Team</name>
-            <email>sylvona-admin@slyonva.com</email>
+            <email>sylvona-admin@sylvona.com</email>
             <organization>Sylvona</organization>
             <organizationUrl>https://www.sylvona.com</organizationUrl>
         </developer>
@@ -35,7 +35,7 @@
     <parent>
         <groupId>com.sylvona.leona</groupId>
         <artifactId>leona-core-parent</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
         <relativePath>../leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 

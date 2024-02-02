@@ -11,7 +11,7 @@
 
 	<groupId>com.sylvona.leona</groupId>
 	<artifactId>leona-core-parent</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>leona-core-parent</name>
 	<description>Parent pom for leona-framework libraries and dependents</description>
 	<packaging>pom</packaging>
@@ -25,7 +25,7 @@
 	<developers>
 		<developer>
 			<name>Leona Framework Team</name>
-			<email>sylvona-admin@slyonva.com</email>
+			<email>sylvona-admin@sylvona.com</email>
 			<organization>Sylvona</organization>
 			<organizationUrl>https://www.sylvona.com</organizationUrl>
 		</developer>
@@ -37,6 +37,7 @@
 	<modules>
 		<module>../../leona-core</module>
 		<module>../leona-core-commons</module>
+		<module>../leona-core-functional</module>
 		<module>../leona-core-utils</module>
 		<module>../leona-testing</module>
 	</modules>
@@ -44,11 +45,12 @@
 	<properties>
 		<java.version>17</java.version>
 		<guava.version>31.1-jre</guava.version>
-		<leona-core.version>0.0.2</leona-core.version>
-		<leona-core-commons.version>0.0.2</leona-core-commons.version>
-		<leona-core-modules.version>0.0.2</leona-core-modules.version>
-		<leona-core-utils.version>0.0.2</leona-core-utils.version>
-		<leona-testing.version>0.0.2</leona-testing.version>
+		<leona-core.version>0.0.3</leona-core.version>
+		<leona-core-commons.version>0.0.3</leona-core-commons.version>
+		<leona-core-functional.version>0.0.3</leona-core-functional.version>
+		<leona-core-modules.version>0.0.3</leona-core-modules.version>
+		<leona-core-utils.version>0.0.3</leona-core-utils.version>
+		<leona-testing.version>0.0.3</leona-testing.version>
 	</properties>
 
 
@@ -104,6 +106,12 @@
 
 			<dependency>
 				<groupId>com.sylvona.leona</groupId>
+				<artifactId>leona-core-functional</artifactId>
+				<version>${leona-core-functional.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-core-modules</artifactId>
 				<version>${leona-core-modules.version}</version>
 			</dependency>
@@ -131,6 +139,31 @@
 
 	<profiles>
 		<profile>
+			<id>javadoc</id>
+			<activation>
+				<property>
+					<name>javadoc</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>github-release</id>
 			<activation>
 				<property>
@@ -143,7 +176,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<inherited>false</inherited>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -156,7 +188,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<inherited>false</inherited>
 						<executions>
 							<execution>
 								<id>attach-sources</id>

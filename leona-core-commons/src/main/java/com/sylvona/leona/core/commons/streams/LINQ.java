@@ -117,12 +117,24 @@ public final class LINQ {
         return stream.filter(predicate).toList();
     }
 
+    public static <T> Set<T> toSet(Stream<T> stream) {
+        return stream.collect(Collectors.toSet());
+    }
+
+    public static <T> Set<T> toSet(Stream<T> stream, Predicate<T> predicate) {
+        return stream.filter(predicate).collect(Collectors.toSet());
+    }
+
     public static <T, TKey, TValue> Map<TKey, TValue> toMap(Stream<T> stream, Function<T, TKey> keyFunction, Function<T, TValue> valueFunction) {
         return stream.collect(Collectors.toMap(keyFunction, valueFunction));
     }
 
     public static <T, TKey, TValue> Map<TKey, TValue> toMap(Stream<T> stream, Function<T, TKey> keyFunction, Function<T, TValue> valueFunction, Supplier<Map<TKey, TValue>> mapSupplier) {
         return stream.collect(Collectors.toMap(keyFunction, valueFunction, (m1, m2) -> m1, mapSupplier));
+    }
+
+    public static <C extends Collection<T>, T> C collect(Stream<T> stream, Supplier<C> collectionSupplier) {
+        return stream.collect(Collectors.toCollection(collectionSupplier));
     }
 
     public static <T> LINQStream<T> stream(T[] array) {

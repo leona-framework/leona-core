@@ -305,11 +305,19 @@ public class LINQStream<T> implements Stream<T> {
         return LINQ.toList(stream, predicate);
     }
 
+    public Set<T> toSet() { return LINQ.toSet(stream); }
+
+    public Set<T> toSet(Predicate<T> predicate) { return LINQ.toSet(stream, predicate); }
+
     public <TKey, TValue> Map<TKey, TValue> toMap(Function<T, TKey> keyFunction, Function<T, TValue> valueFunction) {
         return LINQ.toMap(stream, keyFunction, valueFunction);
     }
 
     public <TKey, TValue> Map<TKey, TValue> toMap(Function<T, TKey> keyFunction, Function<T, TValue> valueFunction, Supplier<Map<TKey, TValue>> mapSupplier) {
         return LINQ.toMap(stream, keyFunction, valueFunction, mapSupplier);
+    }
+
+    public <C extends Collection<T>> C collect(Supplier<C> collection) {
+        return LINQ.collect(stream, collection);
     }
 }
