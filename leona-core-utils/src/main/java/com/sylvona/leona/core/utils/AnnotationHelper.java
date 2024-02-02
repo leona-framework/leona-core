@@ -2,6 +2,7 @@ package com.sylvona.leona.core.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +24,10 @@ public class AnnotationHelper {
 
     public static boolean hasNestedAnnotation(Constructor<?> ctor, Class<? extends Annotation> annotation) {
         return getNestedAnnotation(ctor.getAnnotations(), annotation) != null;
+    }
+
+    public static boolean hasNestedAnnotation(Field field, Class<? extends Annotation> annotation) {
+        return getNestedAnnotation(field, annotation) != null;
     }
 
     public static <T extends Annotation> T getAnnotation(Object object, Class<T> annotation) {
@@ -57,5 +62,9 @@ public class AnnotationHelper {
 
     public static <T extends Annotation> T getNestedAnnotation(Object object, Class<T> annotation) {
         return object == null ? null : getNestedAnnotation(object.getClass().getAnnotations(), annotation);
+    }
+
+    public static <T extends Annotation> T getNestedAnnotation(Field field, Class<T> annotation) {
+        return field == null ? null : getNestedAnnotation(field.getAnnotations(), annotation);
     }
 }

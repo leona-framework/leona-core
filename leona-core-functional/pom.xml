@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>leona-core-functional</artifactId>
+    <name>leona-functional</name>
+    <description>leona-core-functional</description>
+    <version>0.0.3</version>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <parent>
+        <groupId>com.sylvona.leona</groupId>
+        <artifactId>leona-core-parent</artifactId>
+        <version>0.0.3</version>
+        <relativePath>../leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sylvona.leona</groupId>
+            <artifactId>leona-core-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <!-- Optional Dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
