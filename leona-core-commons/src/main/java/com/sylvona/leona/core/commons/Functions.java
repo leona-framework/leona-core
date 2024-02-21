@@ -2,9 +2,26 @@ package com.sylvona.leona.core.commons;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * A utility class containing various functional programming utilities.
+ *
+ * @author Evan Cowin
+ * @since 0.0.1
+ */
 public class Functions {
+    /**
+     * Wraps a function with caching behavior, ensuring that the function is only evaluated once for each input,
+     * with subsequent calls returning the cached result.
+     *
+     * @param function The function to be wrapped with caching behavior.
+     * @param <T>      The type of the input to the function.
+     * @param <R>      The type of the result of the function.
+     * @return A caching function that caches the result of the input function for each input.
+     */
     public static <T, R> Function<T, R> caching(Function<T, R> function) {
         return new CachingFunction<>(function);
     }
@@ -12,15 +29,11 @@ public class Functions {
     @RequiredArgsConstructor
     private static class CachingFunction<T, R> implements Function<T, R> {
         private final Function<T, R> function;
-        private boolean applied;
-        private R result;
+        private final Map<T, R> inputOutputMap = new HashMap<>();
 
         @Override
         public R apply(T t) {
-            if (applied) return result;
-            result = function.apply(t);
-            applied = true;
-            return result;
+            return inputOutputMap.computeIfAbsent(t, function);
         }
     }
 }

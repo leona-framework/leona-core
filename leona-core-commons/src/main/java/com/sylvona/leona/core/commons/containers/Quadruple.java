@@ -16,6 +16,9 @@ import java.util.function.Function;
  * @param <T2> The type of the second element.
  * @param <T3> The type of the third element.
  * @param <T4> The type of the fourth element.
+ *
+ * @author Evan Cowin
+ * @since 0.0.1
  */
 public record Quadruple<T1, T2, T3, T4>(@NotNull T1 item1, @NotNull T2 item2, @NotNull T3 item3, @NotNull T4 item4) implements Streamable<Object> {
 

@@ -88,6 +88,8 @@ public final class Representer {
      * @param annotation The annotation to create a representation for
      * @return A new representation for the given annotation
      * @param <T> The expected type of the returned representation
+     *           
+     * @see #get(Annotation, Class) 
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Annotation annotation) {
@@ -112,6 +114,8 @@ public final class Representer {
      * @param representationClass The class used to create a representation for the given annotation.
      * @return A new instance of {@code representationClass} modelling the given annotation
      * @param <T> The type of the returned representation
+     *           
+     * @see #get(Annotation) 
      */
     public static <T> T get(Annotation annotation, Class<T> representationClass) {
         return getAndRegisterRepresentation(annotation, annotation.getClass(), representationClass);
