@@ -1,8 +1,6 @@
 package com.sylvona.leona.core.commons.ttl;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -113,17 +111,28 @@ class ComplexityDrivenSafeObjectMap<T> implements Map<Object, T> {
     }
 
 
-    @Getter
-    @AllArgsConstructor
     private static class LazyEntry<TKey, TValue> implements Entry<TKey, TValue> {
         private TKey key;
         private TValue value;
+
+        public LazyEntry(TKey key, TValue value) {
+            this.key = key;
+            this.value = value;
+        }
 
         @Override
         public TValue setValue(TValue value) {
             TValue previous = this.value;
             this.value = value;
             return previous;
+        }
+
+        public TKey getKey() {
+            return this.key;
+        }
+
+        public TValue getValue() {
+            return this.value;
         }
     }
 }

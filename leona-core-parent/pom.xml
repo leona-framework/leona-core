@@ -44,7 +44,7 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<guava.version>31.1-jre</guava.version>
+		<guava.version>33.0.0-jre</guava.version>
 		<leona-core.version>0.0.3</leona-core.version>
 		<leona-core-commons.version>0.0.3</leona-core-commons.version>
 		<leona-core-functional.version>0.0.3</leona-core-functional.version>

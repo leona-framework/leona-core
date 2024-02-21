@@ -1,7 +1,5 @@
 package com.sylvona.leona.core.commons;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -26,10 +24,13 @@ public class Functions {
         return new CachingFunction<>(function);
     }
 
-    @RequiredArgsConstructor
     private static class CachingFunction<T, R> implements Function<T, R> {
         private final Function<T, R> function;
         private final Map<T, R> inputOutputMap = new HashMap<>();
+
+        public CachingFunction(Function<T, R> function) {
+            this.function = function;
+        }
 
         @Override
         public R apply(T t) {

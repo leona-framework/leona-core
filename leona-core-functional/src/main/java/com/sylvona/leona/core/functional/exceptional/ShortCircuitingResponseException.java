@@ -1,9 +1,5 @@
 package com.sylvona.leona.core.functional.exceptional;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
-@Getter(AccessLevel.PACKAGE)
 public class ShortCircuitingResponseException extends RuntimeException {
     private final RuntimeException innerException;
 
@@ -13,5 +9,9 @@ public class ShortCircuitingResponseException extends RuntimeException {
 
     public static ShortCircuitingResponseException wrap(RuntimeException runtimeException) {
         return new ShortCircuitingResponseException(runtimeException);
+    }
+
+    RuntimeException getInnerException() {
+        return this.innerException;
     }
 }

@@ -1,24 +1,22 @@
 package com.sylvona.leona.core.functional.exceptional;
 
 import com.sylvona.leona.core.commons.containers.Either;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Getter
-@Accessors(fluent = true)
-@AllArgsConstructor
 public final class Exceptional<T> implements Either<T, Throwable> {
     private final T left;
     private final Throwable right;
 
-    @Getter(AccessLevel.NONE)
     ExceptionalHandler attachedHandler;
+
+    public Exceptional(T left, Throwable right, ExceptionalHandler attachedHandler) {
+        this.left = left;
+        this.right = right;
+        this.attachedHandler = attachedHandler;
+    }
 
     public static <T> Exceptional<T> ok(T result) {
         return new Exceptional<>(result, null, null);
@@ -79,5 +77,15 @@ public final class Exceptional<T> implements Either<T, Throwable> {
             throw new RuntimeException(throwable);
         }
         return left();
+    }
+
+    @Override
+    public T left() {
+        return left;
+    }
+
+    @Override
+    public Throwable right() {
+        return right;
     }
 }
