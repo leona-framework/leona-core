@@ -1,4 +1,4 @@
-package com.sylvona.leona.core.functional.exceptional;
+package com.sylvona.leona.core.aop.exceptional;
 
 import com.sylvona.leona.core.commons.containers.Either;
 

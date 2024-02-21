@@ -1,6 +1,6 @@
-package com.sylvona.leona.core.functional.exceptional;
+package com.sylvona.leona.core.aop.exceptional;
 
-import com.sylvona.leona.core.functional.annotations.Exceptionally;
+import com.sylvona.leona.core.aop.annotations.Exceptionally;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,7 +19,7 @@ public class ExceptionallyAspect {
         this.exceptionalHandler = exceptionalHandler;
     }
 
-    @Pointcut("execution(@com.sylvona.leona.core.functional.annotations.Exceptionally com.sylvona.leona.core.functional.exceptional.Exceptional<?> *(..))")
+    @Pointcut("execution(@com.sylvona.leona.core.aop.annotations.Exceptionally com.sylvona.leona.core.aop.exceptional.Exceptional<?> *(..))")
     public void findMethodsMarkedWithEitherOr() {
     }
 

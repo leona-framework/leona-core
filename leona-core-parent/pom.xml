@@ -37,7 +37,7 @@
 	<modules>
 		<module>../../leona-core</module>
 		<module>../leona-core-commons</module>
-		<module>../leona-core-functional</module>
+		<module>../leona-core-aop</module>
 		<module>../leona-core-utils</module>
 		<module>../leona-testing</module>
 	</modules>
@@ -106,7 +106,7 @@
 
 			<dependency>
 				<groupId>com.sylvona.leona</groupId>
-				<artifactId>leona-core-functional</artifactId>
+				<artifactId>leona-core-aop</artifactId>
 				<version>${leona-core-functional.version}</version>
 			</dependency>
 
