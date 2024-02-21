@@ -16,12 +16,12 @@ import java.util.function.Function;
  * @param <Left> The type of the successful result.
  * @param <Right> The type of the error, which is a subtype of Throwable.
  */
-public interface Either<Left, Right> extends Streamable<Tuple<Left, Right>> {
-    static <Left, Right> Either<Left, Right> ofLeft(Left left) {
+public interface Either<Left, Right extends Throwable> extends Streamable<Object> {
+    static <Left, Right extends Throwable> Either<Left, Right> ofLeft(Left left) {
         return new EitherImpl<>(left, null);
     }
 
-    static <Left, Right> Either<Left, Right> ofRight(Right right) {
+    static <Left, Right extends Throwable> Either<Left, Right> ofRight(Right right) {
         return new EitherImpl<>(null, right);
     }
 
@@ -38,6 +38,14 @@ public interface Either<Left, Right> extends Streamable<Tuple<Left, Right>> {
      * @return The error.
      */
     Right right();
+
+    /**
+     * Returns either the {@code Left} or {@code Right} depending on this instance's state
+     * @return The {@code Left} result or {@code Right} exception
+     */
+    default Object result() {
+        return hasLeft() ? left() : right();
+    }
 
     /**
      * Produces a value based on the content of the "either" instance using the provided functions.
@@ -85,12 +93,12 @@ public interface Either<Left, Right> extends Streamable<Tuple<Left, Right>> {
     }
 
     @Override
-    default LINQStream<Tuple<Left, Right>> stream() {
+    default LINQStream<Object> stream() {
         return LINQ.stream(this);
     }
 
     @Override
-    default @NotNull Iterator<Tuple<Left, Right>> iterator() {
-        return hasLeft() ? SingletonIterator.of(Tuple.of(left(), right())) : SingletonIterator.empty();
+    default @NotNull Iterator<Object> iterator() {
+        return SingletonIterator.of(result());
     }
 }
