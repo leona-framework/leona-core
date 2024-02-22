@@ -1,4 +1,4 @@
-package com.sylvona.leona.core.functional.exceptional;
+package com.sylvona.leona.core.aop.exceptional;
 
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpHeaders;

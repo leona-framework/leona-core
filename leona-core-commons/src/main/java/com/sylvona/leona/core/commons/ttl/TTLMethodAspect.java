@@ -1,6 +1,5 @@
 package com.sylvona.leona.core.commons.ttl;
 
-import lombok.AllArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,12 +11,16 @@ import java.time.Duration;
 
 @Aspect
 @Component
-@AllArgsConstructor
 class TTLMethodAspect {
     private final TTLStore<Object> ttlStore;
 
+    public TTLMethodAspect(TTLStore<Object> ttlStore) {
+        this.ttlStore = ttlStore;
+    }
+
     @Pointcut("execution(@com.sylvona.leona.core.commons.ttl.TTLMethod * *(..))")
-    public void findMarkedTTLMethods() {}
+    public void findMarkedTTLMethods() {
+    }
 
     @Around("findMarkedTTLMethods()")
     public Object doMarkedMethodInterception(ProceedingJoinPoint joinPoint) throws Throwable {

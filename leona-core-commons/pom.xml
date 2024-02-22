@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>leona-core-commons</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>leona-core-commons</name>
     <description>Common set of collections, components, and other useful features that are shared among multiple leona-framework libraries.</description>
     <url>https://github.com/leona-framework/leona-core</url>
@@ -24,7 +24,6 @@
     <scm>
         <url>https://github.com/leona-framework/leona-core/</url>
     </scm>
-
 
 
     <properties>

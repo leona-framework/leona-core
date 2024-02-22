@@ -7,6 +7,9 @@ import java.time.Duration;
  * or an error represented by a {@link Throwable}. Additionally, it provides information about the overall execution time.
  *
  * @param <T> The type of the successful result.
+ *
+ * @author Evan Cowin
+ * @since 0.0.1
  */
 public interface ExecutionView<T> extends Either<T, Throwable> {
 

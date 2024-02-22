@@ -1,15 +1,17 @@
 package com.sylvona.leona.core.utils;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-@RequiredArgsConstructor
 public final class BeanFirstClassConstructor {
     private final ApplicationContext applicationContext;
+
+    public BeanFirstClassConstructor(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
 
     public <T> T getOrCreate(Class<T> cls) {

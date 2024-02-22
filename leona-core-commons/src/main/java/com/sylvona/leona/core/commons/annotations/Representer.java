@@ -16,8 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A utility class that works with the {@link Represents @Represents} annotation to create an object-based representation of a runtime annotation.
- * @see Represents
+ * The main class responsible for creating representation instances of related annotations. It provides methods for
+ * retrieving a representation instance for a given annotation and also acts as the blueprint for representation classes.
+ *
+ * @see Representer#get(Annotation, Class)
+ * @see Representer#get(Annotation)
+ * @author Evan Cowin
+ * @since 0.0.3
  */
 public final class Representer {
     private static final Map<Class<? extends Annotation>, Representer> ANNOTATION_REPRESENTATION_MAP = new HashMap<>();
@@ -41,8 +46,11 @@ public final class Representer {
             // Get the field mapping annotation on the class' fields
             Represents.FieldMapping fieldMappingAnnotation = field.getAnnotation(Represents.FieldMapping.class);
             // If this extractor is being driven by an annotation on the representation class, set the field name to the value of the annotation
-            String fieldNaming = classDriven && fieldMappingAnnotation != null && !StringUtils.isBlank(fieldMappingAnnotation.value()) ? fieldMappingAnnotation.value() : field.getName();
-            allFieldsMap.put(fieldNaming, field);
+            String[] fieldNames = {};
+            if (classDriven && fieldMappingAnnotation != null) fieldNames = fieldMappingAnnotation.value();
+            if (fieldNames.length == 0) fieldNames = new String[] { field.getName() };
+
+            LINQ.stream(fieldNames).forEach(f -> allFieldsMap.put(f, field));
 
             Represents.SourceTargetField targetFieldAnnotation = field.getAnnotation(Represents.SourceTargetField.class);
             if (targetFieldAnnotation == null) continue;
@@ -55,32 +63,33 @@ public final class Representer {
 
         for (Method method : annotationClass.getDeclaredMethods()) {
             Represents.FieldMapping fieldMappingAnnotation = method.getAnnotation(Represents.FieldMapping.class);
-            String fieldMappingName = null;
+            String[] fieldMappingName = {};
             if (fieldMappingAnnotation != null && !classDriven) {
-                if (fieldMappingAnnotation.ignore()) continue;
+                if (fieldMappingAnnotation.excluded()) continue;
                 fieldMappingName = fieldMappingAnnotation.value();
             }
 
-            if (StringUtils.isBlank(fieldMappingName)) {
-                fieldMappingName = method.getName();
-            }
+            LINQ.stream(fieldMappingName).forEach(f -> {
+                Field mappedField = allFieldsMap.get(f);
+                if (mappedField == null) return;
+                mappedField.setAccessible(true);
 
-            Field mappedField = allFieldsMap.get(fieldMappingName);
-            if (mappedField == null) continue;
-            mappedField.setAccessible(true);
-
-            mappedAnnotationFields.add(new Tuple<>(method, mappedField));
+                mappedAnnotationFields.add(new Tuple<>(method, mappedField));
+            });
         }
     }
 
     /**
-     * Creates a representation of the provided annotation using its provided representation class.
+     * Attempts to create a representation for the provided annotation based on all registered classes via the {@link Represents} annotation.
+     * This method is an unsafe shortcut to the {@link Representer#get(Annotation, Class)} method as it assumes the provided annotation has only
+     * one matching representation which conforms to {@code T}. Unless absolutely certain it is preferred to utilize the {@link Representer#get(Annotation, Class)}
+     * method which appropriately handles type safety and will always match the correct return class.
      *
-     * @param annotation The annotation to create a representation for.
-     * @param <T>        The type of the representation.
-     * @return A representation of the annotation.
-     * @throws NoRepresentationException if the passed annotation is not annotated with @Represents OR if its @Represents annotation does not define a representation class.
-     * @throws AnnotationConfigurationException if the passed annotation defines more than one representation class.
+     * @param annotation The annotation to create a representation for
+     * @return A new representation for the given annotation
+     * @param <T> The expected type of the returned representation
+     *
+     * @see #get(Annotation, Class)
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Annotation annotation) {
@@ -97,17 +106,16 @@ public final class Representer {
     }
 
     /**
-     * Creates a representation of the provided annotation using the specified representation class.
-     * Classes passed in via the {@code representationClass parameter} do not need to have the {@link Represents}
-     * annotation present on them, Similarly, the {@code annotation parameter} does not need that annotation present either.
-     * However, if the annotation is present on either input, the mappings provided via that annotation will be used to enhance the final
-     * object. In the case that both inputs have the {@code Represents} annotation present on them, the annotation on the {@code representationClass} will
-     * take priority and will have its field mappings used.
+     * Creates (and/or registers) a representation instance for a given annotation. The provided class <b>MUST</b> have a valid
+     * no-args constructor otherwise this method will fail. Technically, any class can be used as a representation class, but
+     * for optimal compatability, either the {@code annotation} or {@code representationClass} should have a {@link Represents} annotation in it.
      *
-     * @param annotation         The annotation to create a representation for.
-     * @param representationClass The class to use as the representation.
-     * @param <T>                The type of the representation.
-     * @return A representation of the annotation.
+     * @param annotation The annotation to create a representation for.
+     * @param representationClass The class used to create a representation for the given annotation.
+     * @return A new instance of {@code representationClass} modelling the given annotation
+     * @param <T> The type of the returned representation
+     *
+     * @see #get(Annotation)
      */
     public static <T> T get(Annotation annotation, Class<T> representationClass) {
         return getAndRegisterRepresentation(annotation, annotation.getClass(), representationClass);
@@ -138,7 +146,7 @@ public final class Representer {
      * @return a representation of the provided annotation
      * @param <T> the type of the representation.
      */
-    public <T> T createRepresentation(Annotation annotation) {
+    private <T> T createRepresentation(Annotation annotation) {
         T representation = constructRepresentation();
         for (Tuple<Method, Field> methodFieldTuple : mappedAnnotationFields) {
             try {

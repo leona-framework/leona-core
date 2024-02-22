@@ -1,4 +1,4 @@
-package com.sylvona.leona.core.functional.exceptional;
+package com.sylvona.leona.core.aop.exceptional;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

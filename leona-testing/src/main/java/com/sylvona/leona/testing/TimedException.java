@@ -1,10 +1,7 @@
 package com.sylvona.leona.testing;
 
-import lombok.Getter;
-
 import java.time.Duration;
 
-@Getter
 public class TimedException extends RuntimeException {
     private final Duration executionTime;
 
@@ -30,5 +27,9 @@ public class TimedException extends RuntimeException {
     public TimedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, Duration duration) {
         super(message, cause, enableSuppression, writableStackTrace);
         executionTime = duration;
+    }
+
+    public Duration getExecutionTime() {
+        return this.executionTime;
     }
 }

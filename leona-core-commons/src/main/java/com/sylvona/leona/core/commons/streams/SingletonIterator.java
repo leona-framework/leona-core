@@ -1,9 +1,6 @@
 package com.sylvona.leona.core.commons.streams;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -13,28 +10,44 @@ import java.util.NoSuchElementException;
  * This iterator produces the single item and then becomes exhausted.
  *
  * @param <T> The type of the item in the singleton sequence.
+ * @author Evan Cowin
+ * @see Iterator
+ * @since 0.0.1
  */
-@RequiredArgsConstructor(staticName = "of")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SingletonIterator<T> implements Iterator<T>, Iterable<T> {
     private final T item;
     private boolean consumed;
 
+    private SingletonIterator(T item) {
+        this.item = item;
+    }
+
+    private SingletonIterator(T item, boolean consumed) {
+        this.item = item;
+        this.consumed = consumed;
+    }
+
     /**
-     * Creates an empty singleton iterator.
+     * Creates an empty instance of {@link SingletonIterator}.
      *
-     * @param <T> The type of the iterator (implicitly determined as null).
-     * @return An empty singleton iterator.
+     * @param <T> The type of the item.
+     * @return An empty {@link SingletonIterator} instance.
      */
     public static <T> SingletonIterator<T> empty() {
         return new SingletonIterator<>(null, true);
     }
 
     /**
-     * Provides the iterator itself as an Iterable for enhanced for-loop usage.
-     *
-     * @return This singleton iterator as an Iterable.
+     * Creates a new iterator for the singular {@code item}.
+     * @param item The item to create an iterator for.
+     * @return A new {@link SingletonIterator} for the given item.
+     * @param <T> The type of the {@code item}.
+     * @see Iterator
      */
+    public static <T> SingletonIterator<T> of(T item) {
+        return new SingletonIterator<>(item);
+    }
+
     @Override
     public @NotNull Iterator<T> iterator() {
         return this;
@@ -65,4 +78,3 @@ public class SingletonIterator<T> implements Iterator<T>, Iterable<T> {
         return item;
     }
 }
-

@@ -1,7 +1,6 @@
-package com.sylvona.leona.core.functional.exceptional;
+package com.sylvona.leona.core.aop.exceptional;
 
-import com.sylvona.leona.core.functional.annotations.Exceptionally;
-import lombok.RequiredArgsConstructor;
+import com.sylvona.leona.core.aop.annotations.Exceptionally;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,12 +12,16 @@ import java.util.Arrays;
 
 @Aspect
 @Component
-@RequiredArgsConstructor
 public class ExceptionallyAspect {
     private final ExceptionalHandler exceptionalHandler;
 
-    @Pointcut("execution(@com.sylvona.leona.core.functional.annotations.Exceptionally com.sylvona.leona.core.functional.exceptional.Exceptional<?> *(..))")
-    public void findMethodsMarkedWithEitherOr() {}
+    public ExceptionallyAspect(ExceptionalHandler exceptionalHandler) {
+        this.exceptionalHandler = exceptionalHandler;
+    }
+
+    @Pointcut("execution(@com.sylvona.leona.core.aop.annotations.Exceptionally com.sylvona.leona.core.aop.exceptional.Exceptional<?> *(..))")
+    public void findMethodsMarkedWithEitherOr() {
+    }
 
     @Around("findMethodsMarkedWithEitherOr()")
     public Exceptional<?> doInterceptMethods(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -33,7 +36,8 @@ public class ExceptionallyAspect {
             // "Smart" way of binding an exception handler to an exception, this allows for the call of Exception.respond()
             returnValue.attachedHandler = exceptionalHandler;
             return returnValue;
-        } catch (ShortCircuitingResponseException shortCircuit) { // ShortCircuiting means we'll skip the exceptional handling and immediately throw the inner exception
+        } catch (
+                ShortCircuitingResponseException shortCircuit) { // ShortCircuiting means we'll skip the exceptional handling and immediately throw the inner exception
             throw shortCircuit.getInnerException();
         } catch (Throwable e) {
 

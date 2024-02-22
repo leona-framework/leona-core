@@ -3,26 +3,30 @@ package com.sylvona.leona.core.commons.streams;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+
 /**
- * An interface for creating streamable sequences of elements.
+ * An interface for objects that can be streamed as a sequence of elements.
  *
  * @param <T> The type of elements in the stream.
+ * @author Evan Cowin
+ * @see Stream
+ * @since 0.0.1
  */
 public interface Streamable<T> extends Iterable<T> {
-
     /**
-     * Creates a sequential {@link Stream} from the elements of this streamable.
+     * Returns a sequential {@link Stream} of elements from this object.
      *
-     * @return A sequential stream of elements.
+     * @return a sequential {@link Stream} over the elements in this object
+     * @see Stream
      */
     default Stream<T> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
 
     /**
-     * Creates a parallel {@link Stream} from the elements of this streamable.
+     * Returns a possibly parallel {@link Stream} of elements from this object.
      *
-     * @return A parallel stream of elements.
+     * @return a possibly parallel {@link Stream} over the elements in this object
      */
     default Stream<T> parallelStream() {
         return StreamSupport.stream(spliterator(), true);

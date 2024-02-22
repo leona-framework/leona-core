@@ -9,6 +9,8 @@ package com.sylvona.leona.core.commons;
  * Reactor's Mono, where a distinct but non-meaningful return type is required.
  * <p>
  * The singleton instance of {@code VoidLike} can be accessed through the {@link #INSTANCE} field.
+ * @author Evan Cowin
+ * @since 0.0.1
  */
 public final class VoidLike {
 
@@ -23,5 +25,12 @@ public final class VoidLike {
      */
     private VoidLike() {
     }
-}
 
+    /**
+     * Creates a new instance of {@link VoidLike}.
+     * @return A new instance of {@link VoidLike}.
+     */
+    public VoidLike newInstance() {
+        return new VoidLike();
+    }
+}

@@ -15,6 +15,9 @@ import java.util.function.Function;
  *
  * @param <T1> The type of the first element.
  * @param <T2> The type of the second element.
+ *
+ * @author Evan Cowin
+ * @since 0.0.1
  */
 public record Tuple<T1, T2>(@NotNull T1 item1, @NotNull T2 item2) implements Streamable<Object> {
     /**

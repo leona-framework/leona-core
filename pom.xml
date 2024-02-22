@@ -38,7 +38,6 @@
             <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-commons</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-utils</artifactId>

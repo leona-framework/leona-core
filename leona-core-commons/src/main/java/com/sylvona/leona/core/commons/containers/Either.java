@@ -9,7 +9,7 @@ import java.util.function.Function;
  * @param <Left> The expected {@code left} type.
  * @param <Right> The expected {@code right} type.
  */
-public interface Either<Left, Right> {
+public interface Either<Left, Right extends Throwable> {
     /**
      * Constructs a default implementation of {@code Either} with the given left value.
      * @param left the {@code left} value to construct the {@code Either} with.
@@ -17,7 +17,7 @@ public interface Either<Left, Right> {
      * @param <Left> the {@code left} type of the Either.
      * @param <Right> the {@code right} type of the Either.
      */
-    static <Left, Right> Either<Left, Right> ofLeft(Left left) {
+    static <Left, Right extends Throwable> Either<Left, Right> ofLeft(Left left) {
         return new EitherImpl<>(left, null);
     }
 
@@ -28,7 +28,7 @@ public interface Either<Left, Right> {
      * @param <Left> the {@code left} type of the Either.
      * @param <Right> the {@code right} type of the Either.
      */
-    static <Left, Right> Either<Left, Right> ofRight(Right right) {
+    static <Left, Right extends Throwable> Either<Left, Right> ofRight(Right right) {
         return new EitherImpl<>(null, right);
     }
 
@@ -45,6 +45,14 @@ public interface Either<Left, Right> {
      * @return The {@code right} value.
      */
     Right right();
+
+    /**
+     * Returns either the {@code Left} or {@code Right} depending on this instance's state
+     * @return The {@code Left} result or {@code Right} exception
+     */
+    default Object result() {
+        return hasLeft() ? left() : right();
+    }
 
     /**
      * Produces a value based on the content of the {@code Either} instance using the provided functions.
@@ -95,9 +103,7 @@ public interface Either<Left, Right> {
      * @param consumer The consumer to apply to the possible {@code right} value.
      */
     default void ifRight(Consumer<Right> consumer) {
-        if (hasRight()) {
-            consumer.accept(right());
-        }
+        if (hasRight()) consumer.accept(right());
     }
 
     /**
@@ -114,5 +120,15 @@ public interface Either<Left, Right> {
         } else {
             rightConsumer.accept(right());
         }
+    }
+
+    @Override
+    default LINQStream<Object> stream() {
+        return LINQ.stream(this);
+    }
+
+    @Override
+    default @NotNull Iterator<Object> iterator() {
+        return SingletonIterator.of(result());
     }
 }

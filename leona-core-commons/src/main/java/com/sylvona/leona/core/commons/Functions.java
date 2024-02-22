@@ -1,49 +1,40 @@
 package com.sylvona.leona.core.commons;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Utility class containing various function-related operations.
+ * A utility class containing various functional programming utilities.
+ *
+ * @author Evan Cowin
+ * @since 0.0.1
  */
 public class Functions {
-
     /**
-     * Creates a caching version of the given function. The caching function stores the result of the initial
-     * function call and returns the same result when invoked again with the same input.
+     * Wraps a function with caching behavior, ensuring that the function is only evaluated once for each input,
+     * with subsequent calls returning the cached result.
      *
-     * @param function The function to be cached.
+     * @param function The function to be wrapped with caching behavior.
      * @param <T>      The type of the input to the function.
      * @param <R>      The type of the result of the function.
-     * @return A caching function.
+     * @return A caching function that caches the result of the input function for each input.
      */
     public static <T, R> Function<T, R> caching(Function<T, R> function) {
         return new CachingFunction<>(function);
     }
 
-    /**
-     * Private inner class representing a caching function decorator.
-     *
-     * @param <T> The type of the input to the function.
-     * @param <R> The type of the result of the function.
-     */
-    @RequiredArgsConstructor
     private static class CachingFunction<T, R> implements Function<T, R> {
-        private final Map<T, R> inputToResultCache = new HashMap<>(1);
         private final Function<T, R> function;
+        private final Map<T, R> inputOutputMap = new HashMap<>();
 
-        /**
-         * Applies the caching logic to the wrapped function.
-         *
-         * @param t The input to the function.
-         * @return The result of the function.
-         */
+        public CachingFunction(Function<T, R> function) {
+            this.function = function;
+        }
+
         @Override
         public R apply(T t) {
-            return inputToResultCache.computeIfAbsent(t, function);
+            return inputOutputMap.computeIfAbsent(t, function);
         }
     }
 }

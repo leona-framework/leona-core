@@ -1,6 +1,9 @@
 package com.sylvona.leona.core.commons.annotations;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * An annotation that allows for the definition of class(es) to be used as standard representations of annotations.
@@ -15,21 +18,28 @@ import java.lang.annotation.*;
  * <p>When applied to classes, this annotation enables the specification of multiple annotations that a single class can represent.
  * This facilitates the generation of representation classes through the {@link Representer#get(Annotation, Class)} method,
  * though it is not mandatory when creating representations using this method.
+ *
+ * @author Evan Cowin
+ * @since 0.0.3
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 public @interface Represents {
     /**
-     * If annotated on an annotation, specifies the <b>singular</b> class to be used as a representation of this annotation.
-     * If annotated on a class, defines an array of annotation classes that the source class can represent.
-     *
-     * @return A singular class or an array of classes that may represent or be represented by the source.
+     * If this is annotation is present on another annotation, contains classes which model the data contained by the current annotated annotation.
+     * Otherwise, if present on a class, should contain the annotation classes that the current annotated class models.
+     * @return Classes which model the current annotated element.
      */
     Class<?>[] value();
 
     /**
-     * Maps an annotation's method to a field on a target class. This annotation can be used on both an annotation's methods
-     * and a representation class' fields.
+     * An optional annotation declared on a method or field which maps the annotated element to a specific field or method in a representation class / annotation.
+     * <p><p>
+     * When this annotation is present on a method in an annotation it will map the value of the annotated method to the field(s) specified by the annotation.
+     * <p><p>
+     * When present on a field in a class, will map any matching method to the given field. If multiple methods are specified, the first matched method will be mapped.
+     * <p>
+     * Alternatively, allows for a field/method to be excluded in the mapping process.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.FIELD})
@@ -43,23 +53,19 @@ public @interface Represents {
          *
          * @return The name of the annotation method or field to be used as a target for mapping.
          */
-        String value() default "";
+        String[] value() default {};
 
         /**
-         * This property only affects annotations. If set to true, it skips the annotated method when creating a representation.
-         * By default, this property is false.
-         *
-         * @return True if this method should be skipped when creating a representation.
+         * When true excludes the annotated field / method from the mapping process. Defaults to false.
+         * @return true if the annotated element should be ignored mapping, otherwise false.
          */
-        boolean ignore() default false;
+        boolean excluded() default false;
     }
 
     /**
-     * An optional annotation that can be placed on a field in a representation class. This field will be populated with
-     * the annotation that created the representation.
+     * Optional annotation put on a field in a representation class, that gets populated with the annotation that created the representation.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    @interface SourceTargetField {
-    }
+    @interface SourceTargetField { }
 }
