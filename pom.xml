@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>leona-core</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>leona-core</name>
     <description>Provides a simple maven dependency that contains all leona-core libraries.</description>
     <url>https://github.com/leona-framework/leona-core</url>

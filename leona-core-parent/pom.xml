@@ -11,7 +11,7 @@
 
 	<groupId>com.sylvona.leona</groupId>
 	<artifactId>leona-core-parent</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 	<name>leona-core-parent</name>
 	<description>Parent pom for leona-framework libraries and dependents</description>
 	<packaging>pom</packaging>
@@ -45,8 +45,8 @@
 	<properties>
 		<java.version>17</java.version>
 		<guava.version>33.0.0-jre</guava.version>
-		<leona-core.version>0.0.3</leona-core.version>
-		<leona-core-commons.version>0.0.3</leona-core-commons.version>
+		<leona-core.version>0.0.4</leona-core.version>
+		<leona-core-commons.version>0.0.4</leona-core-commons.version>
 		<leona-core-functional.version>0.0.3</leona-core-functional.version>
 		<leona-core-modules.version>0.0.3</leona-core-modules.version>
 		<leona-core-utils.version>0.0.3</leona-core-utils.version>

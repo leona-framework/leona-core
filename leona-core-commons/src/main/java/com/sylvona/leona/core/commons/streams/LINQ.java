@@ -1,10 +1,14 @@
 package com.sylvona.leona.core.commons.streams;
 
 import com.google.common.collect.Streams;
+import com.sylvona.leona.core.commons.containers.Enumerated;
+import com.sylvona.leona.core.commons.containers.Tuple;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -16,6 +20,19 @@ import java.util.stream.StreamSupport;
  * Utility class for operations on Java streams, inspired by LINQ in C#.
  */
 public final class LINQ {
+    /**
+     * Performs an action for each element of the stream, providing the index of the element as an additional parameter to the action.
+     * The index starts at 0 and increments for each element.
+     *
+     * @param stream   The input stream to iterate over.
+     * @param action   The action to be performed for each element, accepting the index and the element itself.
+     * @param <T>      The type of elements in the stream.
+     */
+    public static <T> void forEach(Stream<T> stream, BiConsumer<Integer, ? super T> action) {
+        final AtomicInteger counter = new AtomicInteger(0);
+        stream.forEach(element -> action.accept(counter.getAndIncrement(), element));
+    }
+
     /**
      * Counts the number of elements in the stream that satisfy the given predicate.
      *
@@ -54,6 +71,18 @@ public final class LINQ {
     }
 
     /**
+     * Retrieves the first element from a collection.
+     *
+     * @param collection The input collection.
+     * @param <T>        The type of elements in the collection.
+     * @return           The first element in the collection.
+     * @throws NoSuchElementException if no element is present.
+     */
+    public static <T> T first(Collection<T> collection) {
+        return LINQ.first(collection.stream());
+    }
+
+    /**
      * Finds the first element in the stream that satisfies the given predicate.
      *
      * @param stream    The input stream.
@@ -65,6 +94,19 @@ public final class LINQ {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static <T> T first(Stream<T> stream, Predicate<T> predicate) {
         return stream.filter(predicate).findFirst().get();
+    }
+
+    /**
+     * Retrieves the first element in a collection that satisifes the given predicate.
+     *
+     * @param collection The input collection.
+     * @param predicate  The predicate used for filtering elements.
+     * @param <T>        The type of elements in the collection.
+     * @return           The first element in the collection that matches the predicate.
+     * @throws NoSuchElementException if no element is present.
+     */
+    public static <T> T first(Collection<T> collection, Predicate<T> predicate) {
+        return LINQ.first(collection.stream(), predicate);
     }
 
     /**
@@ -166,6 +208,18 @@ public final class LINQ {
     }
 
     /**
+     * Retrieves the last element from a collection.
+     *
+     * @param collection The input collection.
+     * @param <T>        The type of elements in the collection.
+     * @return           The last element in the collection.
+     * @throws NoSuchElementException if no element is present.
+     */
+    public static <T> T last(Collection<T> collection) {
+        return LINQ.first(collection.stream());
+    }
+
+    /**
      * Finds the last element in the stream that satisfies the given predicate.
      *
      * @param stream    The input stream.
@@ -176,6 +230,19 @@ public final class LINQ {
      */
     public static <T> T last(Stream<T> stream, Predicate<T> predicate) {
         return Streams.findLast(stream.filter(predicate)).get();
+    }
+
+    /**
+     * Retrieves the last element in a collection that satisifes the given predicate.
+     *
+     * @param collection The input collection.
+     * @param predicate  The predicate used for filtering elements.
+     * @param <T>        The type of elements in the collection.
+     * @return           The last element in the collection that matches the predicate.
+     * @throws NoSuchElementException if no element is present.
+     */
+    public static <T> T last(Collection<T> collection, Predicate<T> predicate) {
+        return LINQ.first(collection.stream(), predicate);
     }
 
     /**
@@ -265,6 +332,18 @@ public final class LINQ {
     }
 
     /**
+     * Concatenates two collections, creating a new stream that contains elements from both input sources.
+     *
+     * @param collection  The first collection.
+     * @param collection2 The collection to concatenate.
+     * @param <T>         The type of elements in the collections.
+     * @return A {@link LINQStream} containing elements from both collections.
+     */
+    public static <T> LINQStream<T> concat(Collection<T> collection, Collection<T> collection2) {
+        return concat(collection.stream(), collection2);
+    }
+
+    /**
      * Concatenates multiple streams, creating a new stream that contains elements from all input streams.
      *
      * @param baseStream The base input stream.
@@ -308,6 +387,84 @@ public final class LINQ {
     }
 
     /**
+     * Creates a new stream by applying the given enumerator to each element of the input stream along with its index.
+     * The index starts at 0 and increments for each element.
+     *
+     * @param stream     The input stream to enumerate.
+     * @param enumerator The enumerator function to apply.
+     * @param <T>        The type of elements in the input stream.
+     * @param <R>        The type of elements in the resulting stream.
+     * @return A {@link LINQStream} with elements produced by the enumerator.
+     */
+    public static <T, R> LINQStream<R> enumerated(Stream<T> stream, Enumerator<T, R> enumerator) {
+        final AtomicInteger counter = new AtomicInteger(0);
+        return new LINQStream<>(stream)
+                .map(i -> enumerator.apply(counter.getAndIncrement(), i));
+    }
+
+    /**
+     * Creates a new stream by pairing each element of the input stream with its index.
+     * The index starts at 0 and increments for each element.
+     *
+     * @param stream The input stream to enumerate.
+     * @param <T>    The type of elements in the input stream.
+     * @return A {@link LINQStream} with elements as tuples containing the index and the original element.
+     */
+    public static <T> LINQStream<Enumerated<T>> enumerated(Stream<T> stream) {
+        return LINQ.enumerated(stream, Enumerated::new);
+    }
+
+    /**
+     * Creates a new stream from a stream of tuples containing an index and a value, sorting the stream by the index and extracting the values.
+     *
+     * @param stream The input stream of tuples containing an index and a value.
+     * @param <T>    The type of values in the tuples.
+     * @return A new {@link LINQStream} containing the values, sorted by the index.
+     */
+    public static <T> LINQStream<T> fromEnumeration(Stream<? extends Tuple<Integer, T>> stream) {
+        return LINQ.stream(stream).sorted(Comparator.comparingInt(Tuple::item1)).map(Tuple::item2);
+    }
+
+    /**
+     * Creates a new stream from a collection of tuples containing an index and a value, sorting the stream by the index and extracting the values.
+     *
+     * @param collection The input collection of tuples containing an index and a value.
+     * @param <T>    The type of values in the tuples.
+     * @return A new {@link LINQStream} containing the values, sorted by the index.
+     */
+    public static <T> LINQStream<T> fromEnumeration(Collection<? extends Tuple<Integer, T>> collection) {
+        return LINQ.stream(collection).sorted(Comparator.comparingInt(Tuple::item1)).map(Tuple::item2);
+    }
+
+    /**
+     * Creates a new stream by applying an enumerator function to each tuple in the input stream,
+     * sorting the stream by the index and extracting the resulting values.
+     *
+     * @param stream     The input stream of tuples containing an index and a value.
+     * @param enumerator The enumerator function to apply to each tuple.
+     * @param <T>        The type of values in the tuples.
+     * @param <R>        The type of values produced by the enumerator function.
+     * @return A new {@link LINQStream} containing the values produced by the enumerator function, sorted by the index.
+     */
+    public static <T, R> LINQStream<R> fromEnumeration(Stream<? extends Tuple<Integer, T>> stream, Enumerator<T, R> enumerator) {
+        return LINQ.stream(stream).sorted(Comparator.comparingInt(Tuple::item1)).map(t -> t.compose(enumerator));
+    }
+
+    /**
+     * Creates a new collection by applying an enumerator function to each tuple in the input stream,
+     * sorting the stream by the index and extracting the resulting values.
+     *
+     * @param collection     The input collection of tuples containing an index and a value.
+     * @param enumerator The enumerator function to apply to each tuple.
+     * @param <T>        The type of values in the tuples.
+     * @param <R>        The type of values produced by the enumerator function.
+     * @return A new {@link LINQStream} containing the values produced by the enumerator function, sorted by the index.
+     */
+    public static <T, R> LINQStream<R> fromEnumeration(Collection<? extends Tuple<Integer, T>> collection, Enumerator<T, R> enumerator) {
+        return LINQ.stream(collection).sorted(Comparator.comparingInt(Tuple::item1)).map(t -> t.compose(enumerator));
+    }
+
+    /**
      * Reverses the order of elements in a stream, creating a new stream with elements in reverse order.
      * This method eagerly gets all items in the stream, returning a cached version of the stream.
      *
@@ -320,6 +477,28 @@ public final class LINQ {
             Collections.reverse(list);
             return new ListCollectedStream<>(list.stream(), list);
         }));
+    }
+
+    /**
+     * Reduces a stream into only its distinct elements dictated by the provided key function. The order in-which elements
+     * are identified for "distinctness" is not guarantee.
+     *
+     * @param stream      The input stream to operate upon.
+     * @param keyFunction The function for generating keys used to filter distinct elements.
+     * @param <T>         The type of elements in the stream.
+     * @return A {@link LINQStream} containing only distinct elements from the input stream.
+     */
+    public static <T> LINQStream<T> distinctBy(Stream<T> stream, Function<T, Object> keyFunction) {
+        Map<Object, T> identityMap = new HashMap<>();
+        return new LINQStream<>(stream)
+                .filter(item -> {
+                    Object key = keyFunction.apply(item);
+                    synchronized (identityMap) {
+                        if (identityMap.containsKey(key)) return false;
+                        identityMap.put(key, item);
+                        return true;
+                    }
+                });
     }
 
     /**
@@ -368,9 +547,11 @@ public final class LINQ {
      * @param <TValue>     The type of values for the resulting map.
      * @return A {@link Map} containing the collected elements.
      */
-    public static <T, TKey, TValue> Map<TKey, TValue> toMap(Stream<T> stream,
-                                                            Function<T, TKey> keyFunction,
-                                                            Function<T, TValue> valueFunction) {
+    public static <T, TKey, TValue> Map<TKey, TValue> toMap(
+            Stream<T> stream,
+            Function<T, TKey> keyFunction,
+            Function<T, TValue> valueFunction
+    ) {
         return stream.collect(Collectors.toMap(keyFunction, valueFunction));
     }
 
@@ -387,10 +568,12 @@ public final class LINQ {
      * @param <TValue>     The type of values for the resulting map.
      * @return A {@link Map} containing the collected elements.
      */
-    public static <T, TKey, TValue> Map<TKey, TValue> toMap(Stream<T> stream,
-                                                            Function<T, TKey> keyFunction,
-                                                            Function<T, TValue> valueFunction,
-                                                            Supplier<Map<TKey, TValue>> mapSupplier) {
+    public static <T, TKey, TValue> Map<TKey, TValue> toMap(
+            Stream<T> stream,
+            Function<T, TKey> keyFunction,
+            Function<T, TValue> valueFunction,
+            Supplier<Map<TKey, TValue>> mapSupplier
+    ) {
         return stream.collect(Collectors.toMap(keyFunction, valueFunction, (m1, m2) -> m1, mapSupplier));
     }
 

@@ -1,5 +1,6 @@
 package com.sylvona.leona.core.commons.streams;
 
+import com.sylvona.leona.core.commons.containers.Enumerated;
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +97,16 @@ public class LINQStream<T> implements Stream<T> {
     @Override
     public void forEach(Consumer<? super T> action) {
         stream.forEach(action);
+    }
+
+    /**
+     * Performs an action for each element of the stream, providing the index of the element as an additional parameter to the action.
+     * The index starts at 0 and increments for each element.
+     *
+     * @param action The action to be performed for each element, accepting the index and the element itself.
+     */
+    public void forEach(BiConsumer<Integer, ? super T> action) {
+        LINQ.forEach(stream, action);
     }
 
     @Override
@@ -445,6 +456,28 @@ public class LINQStream<T> implements Stream<T> {
     }
 
     /**
+     * Creates a new stream by applying the given enumerator to each element of the input stream along with its index.
+     * The index starts at 0 and increments for each element.
+     *
+     * @param enumerator The enumerator function to apply.
+     * @param <R>        The type of elements in the resulting stream.
+     * @return A {@link LINQStream} with elements produced by the enumerator.
+     */
+    public <R> LINQStream<R> enumerated(Enumerator<T, R> enumerator) {
+        return LINQ.enumerated(stream, enumerator);
+    }
+
+    /**
+     * Creates a new stream by pairing each element of the input stream with its index.
+     * The index starts at 0 and increments for each element.
+     *
+     * @return A {@link LINQStream} with elements as tuples containing the index and the original element.
+     */
+    public LINQStream<Enumerated<T>> enumerated() {
+        return LINQ.enumerated(stream, Enumerated::new);
+    }
+
+    /**
      * Filters a stream to include only elements of a specific type, creating a new stream of the target type.
      *
      * @param targetClass  The target class for type filtering.
@@ -463,6 +496,17 @@ public class LINQStream<T> implements Stream<T> {
      */
     public LINQStream<T> reverse() {
         return LINQ.reverse(stream);
+    }
+
+    /**
+     * Reduces a stream into only its distinct elements dictated by the provided key function. The order in-which elements
+     * are identified for "distinctness" is not guarantee.
+     *
+     * @param keyFunction The function for generating keys used to filter distinct elements.
+     * @return A {@link LINQStream} containing only distinct elements from the input stream.
+     */
+    public LINQStream<T> distinctBy(Function<T, Object> keyFunction) {
+        return LINQ.distinctBy(stream, keyFunction);
     }
 
     /**
