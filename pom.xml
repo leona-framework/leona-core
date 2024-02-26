@@ -29,7 +29,7 @@
     <parent>
         <groupId>com.sylvona.leona</groupId>
         <artifactId>leona-core-parent</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
         <relativePath>leona-core-parent/pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
@@ -37,10 +37,12 @@
         <dependency>
             <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-commons</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.sylvona.leona</groupId>
             <artifactId>leona-core-utils</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

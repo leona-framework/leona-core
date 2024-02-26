@@ -47,10 +47,10 @@
 		<guava.version>33.0.0-jre</guava.version>
 		<leona-core.version>0.0.4</leona-core.version>
 		<leona-core-commons.version>0.0.4</leona-core-commons.version>
-		<leona-core-functional.version>0.0.3</leona-core-functional.version>
-		<leona-core-modules.version>0.0.3</leona-core-modules.version>
-		<leona-core-utils.version>0.0.3</leona-core-utils.version>
-		<leona-testing.version>0.0.3</leona-testing.version>
+		<leona-core-aop.version>0.0.4</leona-core-aop.version>
+		<leona-core-modules.version>0.0.4</leona-core-modules.version>
+		<leona-core-utils.version>0.0.4</leona-core-utils.version>
+		<leona-testing.version>0.0.4</leona-testing.version>
 	</properties>
 
 
@@ -107,7 +107,7 @@
 			<dependency>
 				<groupId>com.sylvona.leona</groupId>
 				<artifactId>leona-core-aop</artifactId>
-				<version>${leona-core-functional.version}</version>
+				<version>${leona-core-aop.version}</version>
 			</dependency>
 
 			<dependency>
