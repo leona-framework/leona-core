@@ -1,5 +1,12 @@
 package com.sylvona.leona.core.commons.containers;
 
+import com.sylvona.leona.core.commons.streams.LINQ;
+import com.sylvona.leona.core.commons.streams.LINQStream;
+import com.sylvona.leona.core.commons.streams.SingletonIterator;
+import com.sylvona.leona.core.commons.streams.Streamable;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -9,7 +16,7 @@ import java.util.function.Function;
  * @param <Left> The expected {@code left} type.
  * @param <Right> The expected {@code right} type.
  */
-public interface Either<Left, Right extends Throwable> {
+public interface Either<Left, Right extends Throwable> extends Streamable<Object> {
     /**
      * Constructs a default implementation of {@code Either} with the given left value.
      * @param left the {@code left} value to construct the {@code Either} with.
@@ -124,7 +131,7 @@ public interface Either<Left, Right extends Throwable> {
 
     @Override
     default LINQStream<Object> stream() {
-        return LINQ.stream(this);
+        return LINQ.stream(new Object[] { result() });
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.sylvona.leona.core.utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,12 +15,20 @@ public class AnnotationHelper {
         return object != null && object.getClass().getAnnotation(annotation) != null;
     }
 
+    public static boolean hasAnnotation(Method method, Class<? extends Annotation> annotation) {
+        return method != null && method.getAnnotation(annotation) != null;
+    }
+
     public static boolean hasAnnotation(Constructor<?> ctor, Class<? extends Annotation> annotation) {
         return ctor != null && ctor.getAnnotation(annotation) != null;
     }
 
     public static boolean hasNestedAnnotation(Object object, Class<? extends Annotation> annotation) {
         return getNestedAnnotation(object, annotation) != null;
+    }
+
+    public static boolean hasNestedAnnotation(Method method, Class<? extends Annotation> annotation) {
+        return getNestedAnnotation(method.getAnnotations(), annotation) != null;
     }
 
     public static boolean hasNestedAnnotation(Constructor<?> ctor, Class<? extends Annotation> annotation) {

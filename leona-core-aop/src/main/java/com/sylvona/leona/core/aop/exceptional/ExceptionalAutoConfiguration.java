@@ -1,23 +1,21 @@
 package com.sylvona.leona.core.aop.exceptional;
 
+import com.sylvona.leona.core.aop.annotations.EnableExceptionally;
+import com.sylvona.leona.core.aop.exceptional.proxy.ProxyExceptionalConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.context.annotation.AdviceMode;
+import org.springframework.context.annotation.AdviceModeImportSelector;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
+@EnableAspectJAutoProxy
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @AutoConfiguration
-@Import(ExceptionallyAspect.class)
-public class ExceptionalAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnClass({ResponseStatusException.class, HttpClientErrorException.class, HttpServerErrorException.class})
-    public ExceptionalHandler defaultWebExceptionalHandler() {
-        return new DefaultWebExceptionalHandler();
+public class ExceptionalAutoConfiguration extends AdviceModeImportSelector<EnableExceptionally> {
+    @Override
+    protected String[] selectImports(AdviceMode adviceMode) {
+        return new String[] { ProxyExceptionalConfiguration.class.getName() };
     }
 
 }

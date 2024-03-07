@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class Exceptional<T> implements Either<T, Throwable> {
+public class Exceptional<T> implements Either<T, Throwable> {
     private final T left;
     private final Throwable right;
 
@@ -31,41 +31,41 @@ public final class Exceptional<T> implements Either<T, Throwable> {
         return hasRight() ? (E2) new Exceptional<>(null, right, attachedHandler) : (E2) new Exceptional<>(mapper.apply(left), right, attachedHandler);
     }
 
-    public T respond() {
+    public T accept() {
         if (hasLeft()) return left;
-        throw attachedHandler.produceError(attachedHandler.createComposite(right));
+        throw ShortCircuitedException.wrap(attachedHandler.produceException(attachedHandler.createComposite(right)));
     }
 
-    public T respond(Consumer<ErrorResponseSpec> exceptionBuilder) {
+    public T accept(Consumer<ErrorResponseSpec> exceptionBuilder) {
         if (hasLeft()) return left;
         ErrorComposite errorComposite = attachedHandler.createComposite(right);
         exceptionBuilder.accept(errorComposite);
-        throw attachedHandler.produceError(errorComposite);
+        throw ShortCircuitedException.wrap(attachedHandler.produceException(errorComposite));
     }
 
-    public T respond(ExceptionBuilder exceptionBuilder) {
+    public T accept(ExceptionBuilder exceptionBuilder) {
         if (hasLeft()) return left;
         ErrorComposite errorComposite = attachedHandler.createComposite(right);
         exceptionBuilder.accept(right, errorComposite);
-        throw attachedHandler.produceError(errorComposite);
+        throw ShortCircuitedException.wrap(attachedHandler.produceException(errorComposite));
     }
 
-    public T orThrows() throws Throwable {
+    public T orRethrow() throws Throwable {
         if (hasRight()) throw right();
         return left();
     }
 
-    public T orThrows(Function<Throwable, RuntimeException> runtimeExceptionProducer) {
+    public T orRethrow(Function<Throwable, RuntimeException> runtimeExceptionProducer) {
         if (hasRight()) throw runtimeExceptionProducer.apply(right());
         return left();
     }
 
-    public T orThrows(Supplier<RuntimeException> runtimeExceptionSupplier) {
+    public T orRethrow(Supplier<RuntimeException> runtimeExceptionSupplier) {
         if (hasRight()) throw runtimeExceptionSupplier.get();
         return left();
     }
 
-    public T orThrows(RuntimeException runtimeException) {
+    public T orRethrow(RuntimeException runtimeException) {
         if (hasRight()) throw runtimeException;
         return left();
     }

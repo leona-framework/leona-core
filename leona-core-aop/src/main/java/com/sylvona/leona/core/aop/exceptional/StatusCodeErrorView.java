@@ -8,4 +8,5 @@ public interface StatusCodeErrorView {
     String getErrorMessage();
     HttpHeaders getHeaders();
     HttpStatusCode getStatusCode();
+    Throwable getException();
 }

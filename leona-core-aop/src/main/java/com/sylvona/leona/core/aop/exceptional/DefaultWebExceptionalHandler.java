@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.nio.charset.Charset;
 
 @ConditionalOnClass({ResponseStatusException.class, HttpClientErrorException.class, HttpServerErrorException.class})
-class DefaultWebExceptionalHandler implements ExceptionalHandler {
+public class DefaultWebExceptionalHandler implements ExceptionalHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Charset defaultCharset = Charset.defaultCharset();
 
@@ -21,11 +21,7 @@ class DefaultWebExceptionalHandler implements ExceptionalHandler {
     }
 
     @Override
-    public ShortCircuitingResponseException produceError(StatusCodeErrorView statusCodeErrorView) {
-        return ShortCircuitingResponseException.wrap(produceRuntimeException(statusCodeErrorView));
-    }
-
-    private RuntimeException produceRuntimeException(StatusCodeErrorView statusCodeErrorView) {
+    public RuntimeException produceException(StatusCodeErrorView statusCodeErrorView) {
         HttpStatusCode statusCode = statusCodeErrorView.getStatusCode();
 
         byte[] body;

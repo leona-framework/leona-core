@@ -12,17 +12,18 @@ class ErrorCompositeImpl implements ErrorComposite {
     private final HttpHeaders headers;
     private String errorMessage;
     private HttpStatusCode statusCode;
+    private Throwable exception;
     private Object body;
 
     ErrorCompositeImpl(Throwable error) {
+        errorMessage = error.getMessage();
+        exception = error;
         if (error instanceof ErrorResponseException errorResponseException) {
             headers = errorResponseException.getHeaders();
-            errorMessage = errorResponseException.getMessage();
             statusCode = errorResponseException.getStatusCode();
             body = errorResponseException.getBody();
         } else if (error instanceof HttpStatusCodeException statusCodeException) {
             headers = statusCodeException.getResponseHeaders();
-            errorMessage = statusCodeException.getMessage();
             statusCode = statusCodeException.getStatusCode();
             body = statusCodeException.getResponseBodyAsByteArray();
         } else {
@@ -73,5 +74,10 @@ class ErrorCompositeImpl implements ErrorComposite {
     @Override
     public Object getBody() {
         return this.body;
+    }
+
+    @Override
+    public Throwable getException() {
+        return exception;
     }
 }
